@@ -4,6 +4,7 @@ function GameBoard() {
     let winRow = [0,0,0];
     let winCol = [0,0,0];
     let winDiag = 0;
+    let rounds = 0;
     let winAntiDiag = 0;
     const board = [];
 
@@ -21,6 +22,7 @@ function GameBoard() {
         let currCell = board[row][column];
         if (currCell.getValue() == 0) {
             currCell.setValue(player);
+            return checkWin(row, column, player);
         } else {
             return;
         }
@@ -46,12 +48,14 @@ function GameBoard() {
                 winDiag -= 1
             }
         }
+        rounds += 1;
 
         if (Math.abs(winRow[row]) == 3 || Math.abs(winCol[col]) == 3 || Math.abs(winDiag) == 3 || Math.abs(winAntiDiag) == 3) {
             console.log(player + ' wins');
             return player;
         }
         console.log(winRow[row], winCol[col], winAntiDiag, winDiag);
+        return rounds > 9 ? -1 : 0;
     }
 
     const displayBoard = () => {
@@ -79,7 +83,10 @@ function Cell() {
     };
 }
 
-function GameController() {
+function GameController(
+    playerOne = "Player One",
+    playerTwo = "Player Two"
+) {
     const board = GameBoard();
 
     const players = [
@@ -102,9 +109,14 @@ function GameController() {
     const getActivePlayer = () => activePlayer;
 
     const playRound = (row, column) => {
-        board.selectCell(row,column,getActivePlayer().sign);
-        board.checkWin(row, column, getActivePlayer().sign);
-        switchTurns();
+        const onGoing = board.selectCell(row,column,getActivePlayer().sign);
+        if (onGoing == 0) {
+            switchTurns();
+        } else if (onGoing == 1 || onGoing == 2) {
+            console.log(getActivePlayer.name + " Wins!")
+        } else {
+            console.log("Cell is already marked!");
+        }
     };
 
     return {

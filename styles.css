@@ -1,11 +1,24 @@
 button {
     background-color: gray;
-    padding: 10px;
-    min-width: 1rem;
+    font-size: 8rem;
 }
 
 .board {
     display:grid;
     grid-template-rows: 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr;
+    width: 50vw;
+    height: 50vw;
+    justify-content: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.heading {
+    font-weight: 700;
+    font-size: 2rem;
 }

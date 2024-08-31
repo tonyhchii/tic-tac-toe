@@ -147,7 +147,8 @@ function ScreenController() {
                 cellButton.classList.add('cell');
                 cellButton.dataset.column = j;
                 cellButton.dataset.row = i;
-                cellButton.textContent = board[i][j].getValue();
+                const currCell = board[i][j].getValue()
+                cellButton.textContent = currCell === 0 ? "" : currCell === 1 ? 'X' : 'O';
                 boardDiv.appendChild(cellButton);
             }
         }

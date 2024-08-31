@@ -1,4 +1,4 @@
-button {
+.cell {
     background-color: gray;
     font-size: 7rem;
 }
@@ -21,4 +21,10 @@ button {
 .heading {
     font-weight: 700;
     font-size: 2rem;
+}
+
+.restart {
+    font-size: 2rem;
+    font-weight: 600;
+    display: none;
 }

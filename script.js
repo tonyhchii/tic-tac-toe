@@ -67,8 +67,21 @@ function GameBoard() {
         console.log(boardDisplay);
     };
 
+    const restartBoard = () => {
+        winRow = [0,0,0];
+        winCol = [0,0,0];
+        winDiag = 0;
+        rounds = 0;
+        winAntiDiag = 0;
+        for (let i = 0; i < rows; i++) {
+            for(let j =0; j < columns; j++) {
+                board[i][j].setValue(0);
+            }
+        }
+    }
+
     return {
-        getBoard, selectCell, displayBoard, checkWin
+        getBoard, selectCell, displayBoard, checkWin, restartBoard
     };
 }
 
@@ -124,11 +137,17 @@ function GameController(
         }
     };
 
+    const restartGame = () => {
+        winner = 0;
+        board.restartBoard();
+    }
+
     return {
         playRound,
         getActivePlayer,
         getBoard: board.getBoard,
-        getWinner
+        getWinner,
+        restartGame
     };
 }
 
@@ -137,6 +156,8 @@ function ScreenController() {
     const playerTurnDiv = document.querySelector('.turn');
     const boardDiv = document.querySelector('.board');
     const winnerDiv = document.querySelector('.winner');
+    const containerDiv = document.querySelector('.container');
+    const restartButton = document.querySelector('.restart');
 
     const updateScreen = () => {
         boardDiv.textContent = "";
@@ -147,9 +168,13 @@ function ScreenController() {
 
 
         playerTurnDiv.textContent = activePlayer.name + `'s turn`;
+
         if (winner != 0){
             boardDiv.removeEventListener('click', clickHandlerBoard);
-
+            restartButton.style.display = 'block';
+            restartButton.addEventListener('click', restartScreen);
+        } else {
+            winnerDiv.textContent = "";
         }
         
         if (winner == -1) {
@@ -180,9 +205,15 @@ function ScreenController() {
         updateScreen();
     }
 
-    boardDiv.addEventListener('click', clickHandlerBoard);
+    function restartScreen() {
+        game.restartGame();
+        winner = game.getWinner;
+        updateScreen();
+        boardDiv.addEventListener('click', clickHandlerBoard);
+        restartButton.style.display = 'none';
+    }
 
-    updateScreen();
+    restartScreen();
 }
 
 ScreenController();

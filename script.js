@@ -101,30 +101,31 @@ function GameController(
     ];
 
     let activePlayer = players[0];
+    let winner = 0;
 
     const switchTurns = () => {
         activePlayer = activePlayer === players[0] ? players[1] : players[0];
     };
 
     const getActivePlayer = () => activePlayer;
+    const getWinner = () => winner;
 
     const playRound = (row, column) => {
         const onGoing = board.selectCell(row,column,getActivePlayer().sign);
         if (onGoing == 0) {
             switchTurns();
         } else if (onGoing == 1 || onGoing == 2) {
-            console.log(getActivePlayer().name + " Wins!")
+            winner = 1
         } else if (onGoing == -1) {
-            console.log("Game is Tie");
-        } else {
-            console.log("Cell is already marked!");
+            winner = -1;
         }
     };
 
     return {
         playRound,
         getActivePlayer,
-        getBoard: board.getBoard
+        getBoard: board.getBoard,
+        getWinner
     };
 }
 
@@ -132,14 +133,25 @@ function ScreenController() {
     const game = GameController();
     const playerTurnDiv = document.querySelector('.turn');
     const boardDiv = document.querySelector('.board');
+    const winnerDiv = document.querySelector('.winner');
 
     const updateScreen = () => {
         boardDiv.textContent = "";
 
         const board = game.getBoard();
         const activePlayer = game.getActivePlayer();
+        const winner = game.getWinner()
+
 
         playerTurnDiv.textContent = activePlayer.name + `'s turn`;
+        
+        if (winner == -1) {
+            winnerDiv.textContent = 'Game is a tie';
+        } else if (winner == 1 || winner == 2) {
+            winnerDiv.textContent = activePlayer.name + " is the winner!";
+        }
+        
+
 
         for (let i = 0; i < board.length; i++) {
             for (let j = 0; j < board[0].length; j++) {

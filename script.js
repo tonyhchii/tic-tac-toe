@@ -55,7 +55,7 @@ function GameBoard() {
             return player;
         }
         console.log(winRow[row], winCol[col], winAntiDiag, winDiag);
-        return rounds > 9 ? -1 : 0;
+        return rounds > 8 ? -1 : 0;
     }
 
     const displayBoard = () => {
@@ -113,7 +113,9 @@ function GameController(
         if (onGoing == 0) {
             switchTurns();
         } else if (onGoing == 1 || onGoing == 2) {
-            console.log(getActivePlayer.name + " Wins!")
+            console.log(getActivePlayer().name + " Wins!")
+        } else if (onGoing == -1) {
+            console.log("Game is Tie");
         } else {
             console.log("Cell is already marked!");
         }
@@ -137,22 +139,28 @@ function ScreenController() {
         const board = game.getBoard();
         const activePlayer = game.getActivePlayer();
 
-        playerTurnDiv.textContent = activePlayer + `'s turn`;
+        playerTurnDiv.textContent = activePlayer.name + `'s turn`;
 
         for (let i = 0; i < board.length; i++) {
             for (let j = 0; j < board[0].length; j++) {
                 const cellButton = document.createElement("button");
                 cellButton.classList.add('cell');
+                cellButton.dataset.column = j;
+                cellButton.dataset.row = i;
                 cellButton.textContent = board[i][j].getValue();
                 boardDiv.appendChild(cellButton);
             }
         }
             
     }
-    function clickHandlerBoard(row, column) {
-        game.playRound(row, column);
+    function clickHandlerBoard(event) {
+        const selRow = event.target.dataset.row;
+        const selCol = event.target.dataset.column;
+        game.playRound(selRow, selCol);
         updateScreen();
     }
+
+    boardDiv.addEventListener('click', clickHandlerBoard);
 
     updateScreen();
 }

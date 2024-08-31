@@ -29,10 +29,12 @@ function GameBoard() {
     };
 
     const checkWin = (row, col, player) => {
+        row = parseInt(row);
+        col = parseInt(col);
         if (player == 1) {
             winRow[row] += 1;
             winCol[col] += 1;
-            if (row + col == 2) {
+            if ((row + col) == 2) {
                 winAntiDiag += 1;
             }
             if (row == col) {
@@ -41,7 +43,7 @@ function GameBoard() {
         } else {
             winRow[row] -= 1;
             winCol[col] -= 1;
-            if (row + col == 2) {
+            if ((row + col) == 2) {
                 winAntiDiag -= 1;
             }
             if (row == col) {
@@ -49,12 +51,13 @@ function GameBoard() {
             }
         }
         rounds += 1;
-
+        console.log(winRow[row], winCol[col], winAntiDiag, winDiag);
+        console.log(row + col);
         if (Math.abs(winRow[row]) == 3 || Math.abs(winCol[col]) == 3 || Math.abs(winDiag) == 3 || Math.abs(winAntiDiag) == 3) {
             console.log(player + ' wins');
             return player;
         }
-        console.log(winRow[row], winCol[col], winAntiDiag, winDiag);
+        
         return rounds > 8 ? -1 : 0;
     }
 
@@ -144,6 +147,10 @@ function ScreenController() {
 
 
         playerTurnDiv.textContent = activePlayer.name + `'s turn`;
+        if (winner != 0){
+            boardDiv.removeEventListener('click', clickHandlerBoard);
+
+        }
         
         if (winner == -1) {
             winnerDiv.textContent = 'Game is a tie';
